@@ -1,4 +1,5 @@
 import random
+import codecs
 
 
 class player:
@@ -74,53 +75,70 @@ else:
 
 thief.weapon = bron_przeciwnika_1
 
-wyniki = open("wyniki.txt", 'w+')
+wyniki = codecs.open("wyniki.txt", 'w+', 'UTF-8')
 menu = int(input('Czy chcesz zagrać w grę? \n 1. Tak \n 2. Wyjdź \n 3. Zobacz wyniki'))
 points = 0
 
-if menu == 1:
-    print('Witaj w jaskiniach! Oby los się do Ciebie uśmiechnął!')
 
-
-    def zwiedzanie_jaskin(points, gamer, enemy):
-        zycie = 1
+def zwiedzanie_jaskin(points, gamer, enemy):
+    tunel = int(input('Który tunel wybierasz? 1-3 (numer)'))
+    while True:
         tunel_z_przeciwnikiem = random.randint(1, 3)
-        tunel = int(input('Który tunel wybierasz? 1-3 (numer)'))
-        while zycie > 0:
-            if tunel != tunel_z_przeciwnikiem:
+        x = 1
+        if tunel != tunel_z_przeciwnikiem:
+            while x == 1:
                 points += 1
-            else:
-                decyzja = int(input('Napotkałeś przeciwnika! Musisz walczyć (1) albo uciekać(2) !'))
+                x -= 1
+                print(f'Znalazłeś skarb! Twoje punkty: {points}')
+        else:
+            while x == 1:
+                decyzja = int(input('Napotkałeś przeciwnika! Musisz walczyć (1) albo odejść(2) !'))
                 if decyzja == 2:
-                    print(f"Postanowiłeś uciec z kopalni z wynikiem {points}!")
+                    print(f"Postanowiłeś odejść z kopalni z wynikiem {points}!")
+                    wyniki.write(f'Ostatni wynik: {points}, gracza: {p1.name}')
                     return points
                 else:
-                    decyzja_walka = int(input('Przeciwnik atakuje! Uderzasz (1) czy bronisz się (2)?'))
-                    if decyzja_walka == 1:
-                        if character == 1:
-                            if bron_wojownika_1['sila'] > bron_przeciwnika_1['obrona']:
-                                print('Gratulacje! Pokonałeś przeciwnika')
-                                points += 1
-                                continue
+                    while x == 1:
+                        decyzja_walka = int(input('Przeciwnik atakuje! Uderzasz (1) czy bronisz się (2)?'))
+                        if decyzja_walka == 1:
+                            if character == 1:
+                                if bron_wojownika_1['sila'] > bron_przeciwnika_1['obrona']:
+                                    points += 1
+                                    print(f'Gratulacje! Pokonałeś przeciwnika. Twoje punkty: {points}')
+                                    x -= 1
+                                else:
+                                    print(
+                                        'Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
+                                    wyniki.write(f'Kończysz przygodę z wynikiem: {points}')
+                                    return points
+                            elif character == 2:
+                                if bron_maga_1['sila'] > bron_przeciwnika_1['obrona']:
+                                    points += 1
+                                    print(f'Gratulacje! Pokonałeś przeciwnika. Twoje punkty: {points}')
+                                    x -= 1
+                                else:
+                                    print(
+                                        'Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
+                                    wyniki.write(f'Kończysz przygodę z wynikiem: {points}')
+                                    return points
                             else:
-                                print('Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
-                                return points
-                        elif character == 2:
-                            if bron_maga_1['sila'] > bron_przeciwnika_1['obrona']:
-                                print('Gratulacje! Pokonałeś przeciwnika')
-                                points += 1
-                            else:
-                                print('Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
-                                return points
+                                if bron_strzelca_1['sila'] > bron_przeciwnika_1['obrona']:
+                                    points += 1
+                                    print(f'Gratulacje! Pokonałeś przeciwnika. Twoje punkty: {points}')
+                                    x -= 1
+                                else:
+                                    print(
+                                        'Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
+                                    wyniki.write(f'Kończysz przygodę z wynikiem: {points}')
+                                    return points
                         else:
-                            if bron_strzelca_1['sila'] > bron_przeciwnika_1['obrona']:
-                                print('Gratulacje! Pokonałeś przeciwnika')
-                                points += 1
-                            else:
-                                print('Niestety nie udało się pokonać przeciwnika. Jesteś zmuszony opuścić jaskinię.')
-                                return points
-                    else:
-                        print('Udało ci się obronić przed ciosem przeciwnika!')
+                            print('Udało ci się obronić przed ciosem przeciwnika!')
+
+
+if menu == 1:
+    print('Witaj w jaskiniach! Oby los się do Ciebie uśmiechnął!')
+    zwiedzanie_jaskin(points, p1, thief)
+
 
 elif menu == 2:
     print('Do zobaczenia ponownie!')
@@ -129,5 +147,3 @@ elif menu == 2:
 elif menu == 3:
     wyniki.read()
     wyniki.close()
-
-zwiedzanie_jaskin(points, p1, thief)
