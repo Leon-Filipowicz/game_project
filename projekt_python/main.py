@@ -29,11 +29,11 @@ while True:
         character = 'wojownik'
         p1.role = 'wojownik'
         break
-    elif character == 2:
+    elif int(character) == 2:
         character = 'mag'
         p1.role = 'mag'
         break
-    elif character == 3:
+    elif int(character) == 3:
         character = 'strzelec'
         p1.role = 'strzelec'
         break
@@ -75,7 +75,7 @@ else:
 
 thief.weapon = bron_przeciwnika_1
 
-wyniki = codecs.open("wyniki.txt", 'w+', 'UTF-8')
+wyniki = codecs.open("projekt_python\wyniki.txt", 'r+', 'UTF-8')
 menu = int(input('Czy chcesz zagrać w grę? \n 1. Tak \n 2. Wyjdź \n 3. Zobacz wyniki'))
 points = 0
 
@@ -95,7 +95,8 @@ def zwiedzanie_jaskin(points, gamer, enemy):
                 decyzja = int(input('Napotkałeś przeciwnika! Musisz walczyć (1) albo odejść(2) !'))
                 if decyzja == 2:
                     print(f"Postanowiłeś odejść z kopalni z wynikiem {points}!")
-                    wyniki.write(f'Ostatni wynik: {points}, gracza: {p1.name}')
+                    wyniki.write(f'Ostatni wynik: {points}, gracza: {p1.name}, klasą {p1.role}\n')
+                    wyniki.close()
                     return points
                 else:
                     while x == 1:
@@ -139,11 +140,10 @@ if menu == 1:
     print('Witaj w jaskiniach! Oby los się do Ciebie uśmiechnął!')
     zwiedzanie_jaskin(points, p1, thief)
 
-
 elif menu == 2:
     print('Do zobaczenia ponownie!')
     wyniki.close()
 
 elif menu == 3:
-    wyniki.read()
-    wyniki.close()
+    f = open("projekt_python\wyniki.txt", "r")
+    print(f.readline())
